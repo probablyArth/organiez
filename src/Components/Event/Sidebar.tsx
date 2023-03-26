@@ -1,11 +1,13 @@
 import { Button } from "@mantine/core";
-import { Dispatch, FC, SetStateAction } from "react";
-import { menu } from ".";
+import { Dispatch, FC, SetStateAction, useContext } from "react";
+import { EventContext, menu } from ".";
 
 const Sidebar: FC<{
   currMenu: menu;
   setCurrMenu: Dispatch<SetStateAction<menu>>;
 }> = ({ currMenu, setCurrMenu }) => {
+  const { ROLE } = useContext(EventContext);
+
   return (
     <nav className="flex h-full w-full max-w-[300px] flex-col items-center justify-center gap-10 shadow-md">
       <Button
@@ -26,15 +28,17 @@ const Sidebar: FC<{
       >
         Members
       </Button>
-      <Button
-        variant={currMenu === 2 ? "outline" : "filled"}
-        onClick={() => {
-          setCurrMenu(2);
-        }}
-        size="xl"
-      >
-        Settings
-      </Button>
+      {ROLE === "CREATOR" && (
+        <Button
+          variant={currMenu === 2 ? "outline" : "filled"}
+          onClick={() => {
+            setCurrMenu(2);
+          }}
+          size="xl"
+        >
+          Settings
+        </Button>
+      )}
     </nav>
   );
 };

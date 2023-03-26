@@ -40,6 +40,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
         withNormalizeCSS
         theme={{
           colorScheme: "light",
+          fontFamily: "Roboto",
         }}
       >
         <ModalsProvider>

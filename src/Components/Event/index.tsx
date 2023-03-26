@@ -31,10 +31,10 @@ const Event: FC<{ event: IEvent }> = ({ event }) => {
     <EventContext.Provider value={{ event, ROLE }}>
       <div className="flex h-full w-full items-center">
         <Sidebar currMenu={currMenu} setCurrMenu={setCurrMenu} />
-        <div className="flex h-full w-full flex-col items-center p-4">
+        <div className="flex h-full w-full flex-col items-center gap-4 p-4">
           {currMenu === 0 && <Tasks />}
           {currMenu === 1 && <Members />}
-          {currMenu === 2 && <Settings />}
+          {currMenu === 2 && ROLE === "CREATOR" && <Settings />}
         </div>
       </div>
     </EventContext.Provider>
