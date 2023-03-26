@@ -11,6 +11,7 @@ import { userCollection } from "~/firebase/collections";
 import { ModalsProvider } from "@mantine/modals";
 import { type IUser } from "~/firebase/interfaces";
 import { Notifications } from "@mantine/notifications";
+import { useRouter } from "next/router";
 
 interface IAuthContext {
   user: IUser | null;
@@ -32,8 +33,10 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       }
     },
   });
+  const router = useRouter();
   if (loading) return <LoadingSpinner />;
-  if (!user) return <SignIn />;
+  if (!user && router.pathname === "/dashboard") router.push("/");
+
   return (
     <AuthContext.Provider value={{ user: fetchedUser }}>
       <MantineProvider

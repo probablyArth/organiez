@@ -18,9 +18,9 @@ const Dashboard: NextPage = () => {
       where("members", "array-contains", user?.id)
     )
   );
-  const events = useCollectionData(q)[0];
+  const [events, loading] = useCollectionData(q);
   const [currEvent, setCurrEvent] = useState<string | null>(null);
-  if (!events) {
+  if (!events || loading) {
     return <LoadingSpinner />;
   }
   return (
