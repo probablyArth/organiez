@@ -12,7 +12,7 @@ import {
   ThemeIcon,
   Tooltip,
 } from "@mantine/core";
-import { type FC, forwardRef, useContext, useState } from "react";
+import { type FC, forwardRef, useContext, useState, useEffect } from "react";
 import { EventContext } from ".";
 import {
   addDoc,
@@ -26,7 +26,12 @@ import {
 import { taskCollection, userCollection } from "~/firebase/collections";
 import { useCollection } from "react-firebase-hooks/firestore";
 import LoadingSpinner from "../LoadingSpinner";
-import { type IEvent, type ITask, type IUser, STATUS } from "~/firebase/interfaces";
+import {
+  type IEvent,
+  type ITask,
+  type IUser,
+  STATUS,
+} from "~/firebase/interfaces";
 import { modals } from "@mantine/modals";
 import { useForm } from "@mantine/form";
 import { v4 } from "uuid";
@@ -85,20 +90,30 @@ const AddTaskModal: FC<{ event: IEvent }> = ({ event }) => {
     );
   }
   const [members, loading] = useCollection(q);
-  const data = members?.docs.map((member) => {
-    const data = member.data();
-    return {
-      label: data.name,
-      value: data.id,
-      image: data.avatar,
-      description: data.gmail,
-    };
-  }) as { value: string; label: string }[];
-
-  const [assignee, setAssignee] = useState<string | undefined>(
-    data && data[0] ? data[0].value : undefined
+  const [data, setData] = useState<null | { value: string; label: string }[]>(
+    null
   );
-  if (event.members.length < 0) return <h1>First add members</h1>;
+  const [assignee, setAssignee] = useState<string | undefined>(undefined);
+  useEffect(() => {
+    if (!loading) {
+      if (members?.docs) {
+        setData(
+          members?.docs.map((member) => {
+            const data = member.data();
+            return {
+              label: data.name,
+              value: data.id,
+              image: data.avatar,
+              description: data.gmail,
+            };
+          }) as { value: string; label: string }[]
+        );
+      }
+    }
+  }, [loading]);
+  if (loading) return <LoadingSpinner />;
+
+  if (event.members.length === 0) return <h1>First add members</h1>;
 
   return (
     <form
@@ -113,23 +128,18 @@ const AddTaskModal: FC<{ event: IEvent }> = ({ event }) => {
         {...form.getInputProps("description")}
       />
       <div>
-        {!loading && (
+        {!loading && data !== null && (
           <Select
             className="z-[1000000]"
             dropdownPosition="bottom"
-            data={data}
+            data={data as { value: string; label: string }[]}
             searchable
             required
             itemComponent={SelectItem}
             label="Assignee"
             value={assignee}
             withinPortal
-            onChange={(value) =>
-              setAssignee((prev) => {
-                console.log({ prev });
-                return value as string;
-              })
-            }
+            onChange={(value) => setAssignee(value as string)}
           />
         )}
         <LoadingOverlay visible={loading} />

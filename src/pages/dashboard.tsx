@@ -8,6 +8,7 @@ import { AuthContext } from "./_app";
 import LoadingSpinner from "~/Components/LoadingSpinner";
 import { type IEvent } from "~/firebase/interfaces";
 import Event from "~/Components/Event";
+import Head from "next/head";
 
 const Dashboard: NextPage = () => {
   const { user } = useContext(AuthContext);
@@ -24,26 +25,31 @@ const Dashboard: NextPage = () => {
     return <LoadingSpinner />;
   }
   return (
-    <div className="flex h-screen w-screen flex-col">
-      <Header
-        events={events}
-        setCurrEvent={setCurrEvent}
-        currEvent={currEvent}
-      />
-      {events.length === 0 && (
-        <div className="flex h-full w-full items-center justify-center">
-          Start by creating an event
-        </div>
-      )}
-      {events.length > 0 && currEvent === null && (
-        <div className="flex h-full w-full items-center justify-center">
-          Start by selecting an event
-        </div>
-      )}
-      {events.length > 0 && currEvent !== null && (
-        <Event event={events[parseInt(currEvent)] as IEvent} />
-      )}
-    </div>
+    <>
+      <Head>
+        <title>Organiez</title>
+      </Head>
+      <div className="flex h-screen w-screen flex-col">
+        <Header
+          events={events}
+          setCurrEvent={setCurrEvent}
+          currEvent={currEvent}
+        />
+        {events.length === 0 && (
+          <div className="flex h-full w-full items-center justify-center">
+            Start by creating an event
+          </div>
+        )}
+        {events.length > 0 && currEvent === null && (
+          <div className="flex h-full w-full items-center justify-center">
+            Start by selecting an event
+          </div>
+        )}
+        {events.length > 0 && currEvent !== null && (
+          <Event event={events[parseInt(currEvent)] as IEvent} />
+        )}
+      </div>
+    </>
   );
 };
 

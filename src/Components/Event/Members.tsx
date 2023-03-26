@@ -1,7 +1,7 @@
 import { Avatar, Button, Paper, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
-import { doc, getDocs, query, updateDoc, where } from "firebase/firestore";
+import { doc, getDocs, or, query, updateDoc, where } from "firebase/firestore";
 import { type FC, useContext } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { eventCollection, userCollection } from "~/firebase/collections";
@@ -51,6 +51,7 @@ const AddMemberModal: FC<{ eventId: string; membersList: string[] }> = ({
   return (
     <form onSubmit={form.onSubmit((values) => handleSubmit(values.email))}>
       <TextInput label="Member email" {...form.getInputProps("email")} />
+      <Button>Add</Button>
     </form>
   );
 };
@@ -75,7 +76,10 @@ const Members: FC = () => {
   const { ROLE, event } = useContext(EventContext);
   let q = null;
   if (event.members.length > 0) {
-    q = query(userCollection, where("id", "in", event.members));
+    q = query(
+      userCollection,
+      or(where("id", "in", event.members), where("id", "==", event.creatorId))
+    );
   }
   const [members, loading, error] = useCollection(q);
 
