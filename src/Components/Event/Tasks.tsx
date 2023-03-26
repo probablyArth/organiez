@@ -12,7 +12,7 @@ import {
   ThemeIcon,
   Tooltip,
 } from "@mantine/core";
-import { FC, forwardRef, useContext, useState } from "react";
+import { type FC, forwardRef, useContext, useState } from "react";
 import { EventContext } from ".";
 import {
   addDoc,
@@ -26,7 +26,7 @@ import {
 import { taskCollection, userCollection } from "~/firebase/collections";
 import { useCollection } from "react-firebase-hooks/firestore";
 import LoadingSpinner from "../LoadingSpinner";
-import { IEvent, ITask, IUser, STATUS } from "~/firebase/interfaces";
+import { type IEvent, type ITask, type IUser, STATUS } from "~/firebase/interfaces";
 import { modals } from "@mantine/modals";
 import { useForm } from "@mantine/form";
 import { v4 } from "uuid";

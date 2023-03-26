@@ -6,7 +6,7 @@ import Header from "~/Components/Header";
 import { eventCollection } from "~/firebase/collections";
 import { AuthContext } from "./_app";
 import LoadingSpinner from "~/Components/LoadingSpinner";
-import { IEvent } from "~/firebase/interfaces";
+import { type IEvent } from "~/firebase/interfaces";
 import Event from "~/Components/Event";
 
 const Dashboard: NextPage = () => {

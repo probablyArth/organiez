@@ -1,6 +1,6 @@
 import { Button } from "@mantine/core";
-import { Dispatch, FC, SetStateAction, useContext } from "react";
-import { EventContext, menu } from ".";
+import { type Dispatch, type FC, type SetStateAction, useContext } from "react";
+import { EventContext, type menu } from ".";
 
 const Sidebar: FC<{
   currMenu: menu;

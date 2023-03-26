@@ -9,7 +9,8 @@ import { createContext, useState } from "react";
 import { getDocs, query, where } from "firebase/firestore";
 import { userCollection } from "~/firebase/collections";
 import { ModalsProvider } from "@mantine/modals";
-import { IUser } from "~/firebase/interfaces";
+import { type IUser } from "~/firebase/interfaces";
+import { Notifications } from "@mantine/notifications";
 
 interface IAuthContext {
   user: IUser | null;
@@ -43,9 +44,11 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           fontFamily: "Roboto",
         }}
       >
-        <ModalsProvider>
-          <Component {...pageProps} />
-        </ModalsProvider>
+        <Notifications>
+          <ModalsProvider>
+            <Component {...pageProps} />
+          </ModalsProvider>
+        </Notifications>
       </MantineProvider>
     </AuthContext.Provider>
   );

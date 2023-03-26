@@ -4,14 +4,20 @@ import { EventContext } from ".";
 import { deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
 import { eventCollection } from "~/firebase/collections";
 import { modals } from "@mantine/modals";
+import { notifications } from "@mantine/notifications";
 
 const deleteEvent = async (eventId: string) => {
-  const eventDoc = doc(
-    eventCollection,
-    (await getDocs(query(eventCollection, where("id", "==", eventId)))).docs[0]
-      ?.id
-  );
-  await deleteDoc(eventDoc);
+  try {
+    const eventDoc = doc(
+      eventCollection,
+      (await getDocs(query(eventCollection, where("id", "==", eventId))))
+        .docs[0]?.id
+    );
+    await deleteDoc(eventDoc);
+    notifications.show({ message: "Success!", color: "green" });
+  } catch (e) {
+    notifications.show({ message: "An error occurred!", color: "red" });
+  }
 };
 
 const Settings = () => {

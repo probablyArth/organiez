@@ -2,11 +2,13 @@ import { Avatar, Button, Paper, Text, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { doc, getDocs, query, updateDoc, where } from "firebase/firestore";
-import { FC, useContext } from "react";
+import { type FC, useContext } from "react";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { eventCollection, userCollection } from "~/firebase/collections";
-import { IUser } from "~/firebase/interfaces";
+import { type IUser } from "~/firebase/interfaces";
 import { EventContext } from ".";
+import { notifications } from "@mantine/notifications";
+import LoadingSpinner from "../LoadingSpinner";
 
 const AddMemberModal: FC<{ eventId: string; membersList: string[] }> = ({
   eventId,
@@ -25,18 +27,25 @@ const AddMemberModal: FC<{ eventId: string; membersList: string[] }> = ({
   });
 
   const handleSubmit = async (email: string) => {
-    const q = query(userCollection, where("gmail", "==", email));
-    const docs = await getDocs(q);
-    if (docs.empty) {
-      form.setFieldError("email", "User not found!");
+    try {
+      const q = query(userCollection, where("gmail", "==", email));
+      const docs = await getDocs(q);
+      if (docs.empty) {
+        form.setFieldError("email", "User not found!");
+      }
+      const eventDoc = doc(
+        eventCollection,
+        (await getDocs(query(eventCollection, where("id", "==", eventId))))
+          .docs[0]?.id
+      );
+      await updateDoc(eventDoc, {
+        members: [...membersList, docs.docs[0]?.data().id],
+      });
+      modals.closeAll();
+      notifications.show({ message: "Success!", color: "green" });
+    } catch (e) {
+      notifications.show({ message: "An error occurred!", color: "red" });
     }
-    const eventDoc = doc(
-      eventCollection,
-      (await getDocs(query(eventCollection, where("id", "==", eventId))))
-        .docs[0]?.id
-    );
-    updateDoc(eventDoc, { members: [...membersList, docs.docs[0]?.data().id] });
-    modals.closeAll();
   };
 
   return (
@@ -68,7 +77,15 @@ const Members: FC = () => {
   if (event.members.length > 0) {
     q = query(userCollection, where("id", "in", event.members));
   }
-  const [members] = useCollection(q);
+  const [members, loading, error] = useCollection(q);
+
+  if (loading) {
+    return <LoadingSpinner />;
+  }
+
+  if (error) {
+    return <h1>An error occured please reload!</h1>;
+  }
 
   return (
     <>

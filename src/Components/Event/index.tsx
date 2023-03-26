@@ -1,5 +1,5 @@
-import { FC, useContext, useState } from "react";
-import { IEvent } from "~/firebase/interfaces";
+import { type FC, useContext, useState } from "react";
+import { type IEvent } from "~/firebase/interfaces";
 import Sidebar from "./Sidebar";
 import Tasks from "./Tasks";
 import Members from "./Members";

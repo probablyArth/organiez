@@ -1,6 +1,6 @@
-import { CollectionReference, collection } from "firebase/firestore";
+import { type CollectionReference, collection } from "firebase/firestore";
 import { db } from "~/firebase";
-import { IEvent, ITask, IUser } from "./interfaces";
+import { type IEvent, type ITask, type IUser } from "./interfaces";
 
 export const userCollection = collection(
   db,
