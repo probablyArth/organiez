@@ -10,7 +10,6 @@ export default class _Document extends Document {
     return (
       <Html>
         <Head>
-          <title>Organiez</title>
           <link rel="preconnect" href="https://fonts.googleapis.com" />
           <link
             rel="preconnect"

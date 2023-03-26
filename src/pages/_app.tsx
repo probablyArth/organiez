@@ -3,7 +3,6 @@ import "~/styles/globals.css";
 import { useAuthState, useSignInWithGoogle } from "react-firebase-hooks/auth";
 import { auth } from "~/firebase/index";
 import LoadingSpinner from "~/Components/LoadingSpinner";
-import SignIn from "~/Components/SignIn";
 import { MantineProvider } from "@mantine/core";
 import { createContext, useState } from "react";
 import { getDocs, query, where } from "firebase/firestore";
@@ -11,7 +10,6 @@ import { userCollection } from "~/firebase/collections";
 import { ModalsProvider } from "@mantine/modals";
 import { type IUser } from "~/firebase/interfaces";
 import { Notifications } from "@mantine/notifications";
-import { useRouter } from "next/router";
 
 interface IAuthContext {
   user: IUser | null;
@@ -33,9 +31,8 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       }
     },
   });
-  const router = useRouter();
+
   if (loading) return <LoadingSpinner />;
-  if (!user && router.pathname === "/dashboard") router.push("/");
 
   return (
     <AuthContext.Provider value={{ user: fetchedUser }}>
@@ -47,11 +44,10 @@ const MyApp: AppType = ({ Component, pageProps }) => {
           fontFamily: "Roboto",
         }}
       >
-        <Notifications>
-          <ModalsProvider>
-            <Component {...pageProps} />
-          </ModalsProvider>
-        </Notifications>
+        <ModalsProvider>
+          <Notifications />
+          <Component {...pageProps} />
+        </ModalsProvider>
       </MantineProvider>
     </AuthContext.Provider>
   );
