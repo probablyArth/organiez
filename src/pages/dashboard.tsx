@@ -1,4 +1,4 @@
-import { DocumentData, or, query, where } from "firebase/firestore";
+import { or, query, where } from "firebase/firestore";
 import { type NextPage } from "next";
 import { useContext, useState } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
@@ -15,10 +15,10 @@ const Dashboard: NextPage = () => {
     eventCollection,
     or(
       where("creatorId", "==", user?.id),
-      where("membersIds", "array-contains", user?.id)
+      where("members", "array-contains", user?.id)
     )
   );
-  const events = useCollectionData(q)[0] as IEvent[];
+  const events = useCollectionData(q)[0];
   const [currEvent, setCurrEvent] = useState<string | null>(null);
   if (!events) {
     return <LoadingSpinner />;

@@ -8,6 +8,7 @@ import { IEvent } from "~/firebase/interfaces";
 import { AuthContext } from "~/pages/_app";
 import { BsFillTrashFill } from "react-icons/bs";
 import { auth } from "~/firebase";
+import { v4 } from "uuid";
 
 const Modal = () => {
   const { user } = useContext(AuthContext);
@@ -17,9 +18,11 @@ const Modal = () => {
     description: string;
   }) => {
     await addDoc(eventCollection, {
-      creatorId: user?.id,
+      creatorId: user?.id as string,
       title: values.title,
       description: values.description,
+      members: [],
+      id: v4(),
     });
     modals.closeAll();
   };

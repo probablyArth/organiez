@@ -3,6 +3,7 @@ import { GoogleAuthProvider, signInWithPopup } from "firebase/auth";
 import { addDoc, getDocs, query, where } from "firebase/firestore";
 import { auth } from "~/firebase/index";
 import { userCollection } from "~/firebase/collections";
+import { v4 } from "uuid";
 
 const SignIn = () => {
   const signInWithGoogle = async () => {
@@ -15,11 +16,11 @@ const SignIn = () => {
     if (data.empty) {
       const resultRef = await addDoc(userCollection, {
         uid: user.user.uid,
-        gmail: user.user.email,
-        avatar: user.user.photoURL,
-        name: user.user.displayName,
+        gmail: user.user.email as string,
+        avatar: user.user.photoURL as string,
+        name: user.user.displayName as string,
+        id: v4(),
       });
-      console.log({ resultRef });
     }
   };
   return <Button onClick={signInWithGoogle}>Sign In</Button>;
