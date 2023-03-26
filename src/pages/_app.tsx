@@ -4,12 +4,14 @@ import { useAuthState, useSignInWithGoogle } from "react-firebase-hooks/auth";
 import { auth } from "~/firebase/index";
 import LoadingSpinner from "~/Components/LoadingSpinner";
 import { MantineProvider } from "@mantine/core";
-import { createContext, useState } from "react";
+import { createContext, useEffect, useState } from "react";
 import { getDocs, query, where } from "firebase/firestore";
 import { userCollection } from "~/firebase/collections";
 import { ModalsProvider } from "@mantine/modals";
 import { type IUser } from "~/firebase/interfaces";
 import { Notifications } from "@mantine/notifications";
+import { useRouter } from "next/router";
+import Home from ".";
 
 interface IAuthContext {
   user: IUser | null;
@@ -32,7 +34,18 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     },
   });
 
+  const [actualLoading, setActualLoading] = useState(true);
+
+  const router = useRouter();
+  useEffect(() => {
+    console.log({ fetchedUser });
+    if (fetchedUser != null && fetchedUser != undefined) {
+      setActualLoading(false);
+    }
+  }, [fetchedUser]);
   if (loading) return <LoadingSpinner />;
+  if (!user) return <Home />;
+  if (user && actualLoading) return <LoadingSpinner />;
 
   return (
     <AuthContext.Provider value={{ user: fetchedUser }}>
