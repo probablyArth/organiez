@@ -16,6 +16,8 @@ const SignIn = () => {
       const resultRef = await addDoc(userCollection, {
         uid: user.user.uid,
         gmail: user.user.email,
+        avatar: user.user.photoURL,
+        name: user.user.displayName,
       });
       console.log({ resultRef });
     }
