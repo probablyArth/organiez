@@ -62,16 +62,21 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
 );
 
 const AddTaskModal: FC<{ event: IEvent }> = ({ event }) => {
+  const [otherError, setError] = useState<null | string>(null);
   const handleSubmit = async (description: string, assignee: string) => {
-    console.log({ description, assignee });
-    await addDoc(taskCollection, {
+    addDoc(taskCollection, {
       id: v4(),
       assigned: assignee,
       eventId: event.id,
       description,
       status: STATUS.NOT_STARTED,
-    });
-    modals.closeAll();
+    })
+      .then(() => {
+        modals.closeAll();
+      })
+      .catch((e) => {
+        setError(e.message);
+      });
   };
 
   const form = useForm({
@@ -89,7 +94,7 @@ const AddTaskModal: FC<{ event: IEvent }> = ({ event }) => {
       or(where("id", "in", event.members), where("id", "==", event.creatorId))
     );
   }
-  const [members, loading] = useCollection(q);
+  const [members, loading, error] = useCollection(q);
   const [data, setData] = useState<null | { value: string; label: string }[]>(
     null
   );
@@ -116,36 +121,42 @@ const AddTaskModal: FC<{ event: IEvent }> = ({ event }) => {
   if (event.members.length === 0) return <h1>First add members</h1>;
 
   return (
-    <form
-      className="flex h-full flex-col gap-4"
-      onSubmit={form.onSubmit((values) =>
-        handleSubmit(values.description, assignee as string)
-      )}
-    >
-      <TextInput
-        label="Task Description"
-        required
-        {...form.getInputProps("description")}
-      />
-      <div>
-        {!loading && data !== null && (
-          <Select
-            className="z-[1000000]"
-            dropdownPosition="bottom"
-            data={data as { value: string; label: string }[]}
-            searchable
-            required
-            itemComponent={SelectItem}
-            label="Assignee"
-            value={assignee}
-            withinPortal
-            onChange={(value) => setAssignee(value as string)}
-          />
-        )}
-        <LoadingOverlay visible={loading} />
+    <>
+      <div className="text-red">
+        {error && <h1>{error.message}</h1>}
+        {otherError && <h1>{otherError}</h1>}
       </div>
-      <Button type="submit">Add</Button>
-    </form>
+      <form
+        className="flex h-full flex-col gap-4"
+        onSubmit={form.onSubmit((values) =>
+          handleSubmit(values.description, assignee as string)
+        )}
+      >
+        <TextInput
+          label="Task Description"
+          required
+          {...form.getInputProps("description")}
+        />
+        <div>
+          {!loading && data !== null && (
+            <Select
+              className="z-[1000000]"
+              dropdownPosition="bottom"
+              data={data as { value: string; label: string }[]}
+              searchable
+              required
+              itemComponent={SelectItem}
+              label="Assignee"
+              value={assignee}
+              withinPortal
+              onChange={(value) => setAssignee(value as string)}
+            />
+          )}
+          <LoadingOverlay visible={loading} />
+        </div>
+        <Button type="submit">Add</Button>
+      </form>
+    </>
   );
 };
 
@@ -164,7 +175,7 @@ const TaskCard: FC<{ task: ITask }> = ({ task }) => {
   if (task.status === STATUS.FINISHED) color = "green";
   const userContext = useContext(AuthContext);
   const assignedQuery = query(userCollection, where("id", "==", task.assigned));
-  const [user, loading] = useCollection(assignedQuery);
+  const [user, loading, error] = useCollection(assignedQuery);
   const userData = user?.docs[0]?.data() as IUser;
   return (
     <Paper
@@ -172,6 +183,7 @@ const TaskCard: FC<{ task: ITask }> = ({ task }) => {
       shadow="sm"
       p={"lg"}
     >
+      {error && <Text fz={"sm"}>{error.message}</Text>}
       <div className="flex flex-col gap-2">
         <Text fz={"lg"}>{task.description}</Text>
         <div className="flex items-center">
@@ -221,7 +233,7 @@ const TaskCard: FC<{ task: ITask }> = ({ task }) => {
 const Tasks = () => {
   const { event, ROLE } = useContext(EventContext);
 
-  const [tasks, loading] = useCollection(
+  const [tasks, loading, error] = useCollection(
     query(taskCollection, where("eventId", "==", event.id))
   );
 
@@ -231,6 +243,7 @@ const Tasks = () => {
 
   return (
     <>
+      {error && <Text fz={"sm"}>{error.message}</Text>}
       {ROLE === "CREATOR" && (
         <Button
           onClick={() => {

@@ -4,6 +4,7 @@ import { addDoc, getDocs, query, where } from "firebase/firestore";
 import { auth } from "~/firebase/index";
 import { userCollection } from "~/firebase/collections";
 import { v4 } from "uuid";
+import { notifications } from "@mantine/notifications";
 
 const SignIn = () => {
   const signInWithGoogle = async () => {
@@ -14,12 +15,14 @@ const SignIn = () => {
     );
 
     if (data.empty) {
-      const resultRef = await addDoc(userCollection, {
+      await addDoc(userCollection, {
         uid: user.user.uid,
         gmail: user.user.email as string,
         avatar: user.user.photoURL as string,
         name: user.user.displayName as string,
         id: v4(),
+      }).catch(() => {
+        notifications.show({ color: "red", message: "An error occured!" });
       });
     }
   };
