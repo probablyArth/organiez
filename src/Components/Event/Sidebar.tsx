@@ -67,7 +67,9 @@ const Sidebar: FC<{
       </Media>
       <Media between={["zero", "md"]}>
         <Button
-          className="absolute rounded-l-none rounded-r-full"
+          className={`absolute z-[100000000000000000] rounded-l-none rounded-r-full ${
+            opened && "hidden"
+          }`}
           onClick={open}
         >
           Menu

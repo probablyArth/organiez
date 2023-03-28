@@ -6,6 +6,7 @@ import Members from "./Members";
 import Settings from "./Settings";
 import { createContext } from "react";
 import { AuthContext } from "~/pages/_app";
+import { ScrollArea } from "@mantine/core";
 
 export type menu = 0 | 1 | 2;
 type ROLE = "CREATOR" | "MEMBER";
@@ -29,13 +30,15 @@ const Event: FC<{ event: IEvent }> = ({ event }) => {
   }
   return (
     <EventContext.Provider value={{ event, ROLE }}>
-      <div className="flex h-full w-full items-center">
+      <div className="flex h-[calc(100%-120px)] w-full items-center">
         <Sidebar currMenu={currMenu} setCurrMenu={setCurrMenu} />
-        <div className="flex h-full w-full flex-col items-center gap-4 p-4">
-          {currMenu === 0 && <Tasks />}
-          {currMenu === 1 && <Members />}
-          {currMenu === 2 && ROLE === "CREATOR" && <Settings />}
-        </div>
+        <ScrollArea className="flex h-full w-full">
+          <div className="flex h-full w-full flex-col items-center gap-4 p-4">
+            {currMenu === 0 && <Tasks />}
+            {currMenu === 1 && <Members />}
+            {currMenu === 2 && ROLE === "CREATOR" && <Settings />}
+          </div>
+        </ScrollArea>
       </div>
     </EventContext.Provider>
   );
