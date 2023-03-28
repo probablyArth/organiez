@@ -64,7 +64,7 @@ const MemberStats = () => {
     <div className="flex justify-between">
       <Text fz={"lg"}>Members</Text>
       <Text fz={"lg"} fw={"bold"}>
-        {users ? <>{users.docs.length} + 1</> : 1}
+        {users ? <>{users.docs.length + 1}</> : 1}
       </Text>
     </div>
   );
