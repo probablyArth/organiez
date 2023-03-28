@@ -20,4 +20,12 @@ jobs:
       - name: Lint
         run: yarn lint
       - name: Build
+        env:
+          NEXT_PUBLIC_apiKey: "a variable"
+          NEXT_PUBLIC_authDomain: "a variable"
+          NEXT_PUBLIC_projectId: "a variable"
+          NEXT_PUBLIC_storageBucket: "a variable"
+          NEXT_PUBLIC_messagingSenderId: "a variable"
+          NEXT_PUBLIC_appId: "a variable"
+          NEXT_PUBLIC_measurementId: "a variable"
         run: yarn build
