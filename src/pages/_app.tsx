@@ -10,7 +10,7 @@ import { userCollection } from "~/firebase/collections";
 import { ModalsProvider } from "@mantine/modals";
 import { type IUser } from "~/firebase/interfaces";
 import { Notifications } from "@mantine/notifications";
-import { useRouter } from "next/router";
+import { Router, useRouter } from "next/router";
 import Home from ".";
 
 interface IAuthContext {
@@ -33,7 +33,15 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       }
     },
   });
-
+  const [pageChangeLoad, setLoading] = useState(false);
+  Router.events.on("routeChangeStart", (url) => {
+    console.log("changeStart", { url });
+    setLoading(true);
+  });
+  Router.events.on("routeChangeComplete", (url) => {
+    console.log("changeComplete", { url });
+    setLoading(false);
+  });
   const [actualLoading, setActualLoading] = useState(true);
 
   const router = useRouter();
@@ -42,7 +50,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
       setActualLoading(false);
     }
   }, [fetchedUser]);
-  if (loading) return <LoadingSpinner />;
+  if (loading || pageChangeLoad) return <LoadingSpinner />;
   if (!user) return <Home />;
   if (user && actualLoading) return <LoadingSpinner />;
 

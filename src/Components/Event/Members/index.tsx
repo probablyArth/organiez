@@ -22,7 +22,11 @@ const Members: FC = () => {
   const [members, loading, error] = useCollection(q);
 
   if (loading || loadingAsWell) {
-    return <LoadingSpinner />;
+    return (
+      <div className="relative h-[calc(100vh-160px)] w-full">
+        <LoadingSpinner />
+      </div>
+    );
   }
 
   if (error || errorAsWell) {

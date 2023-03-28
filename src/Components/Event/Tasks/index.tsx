@@ -17,7 +17,11 @@ const Tasks = () => {
   );
 
   if (loading) {
-    return <LoadingSpinner />;
+    return (
+      <div className="relative h-[calc(100vh-160px)] w-full">
+        <LoadingSpinner />
+      </div>
+    );
   }
   return (
     <>

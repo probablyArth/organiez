@@ -7,6 +7,7 @@ import { type ITask, type IUser, STATUS } from "~/firebase/interfaces";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { FaCog } from "react-icons/fa";
 import { AuthContext } from "~/pages/_app";
+import LoadingSpinner from "~/Components/LoadingSpinner";
 
 const updateTaskStatus = async (taskId: string, status: STATUS) => {
   const taskDoc = doc(
@@ -27,11 +28,12 @@ const TaskCard: FC<{ task: ITask }> = ({ task }) => {
   const userData = user?.docs[0]?.data() as IUser;
   return (
     <Paper
-      className="flex h-full min-h-[120px] w-full items-center justify-between"
+      className="relative flex h-full min-h-[120px] w-full items-center justify-between"
       shadow="sm"
       p={"lg"}
     >
       {error && <Text fz={"sm"}>{error.message}</Text>}
+      {loading && <LoadingSpinner />}
       <div className="flex flex-col gap-2">
         <Text fz={"lg"}>{task.description}</Text>
         <div className="flex items-center">

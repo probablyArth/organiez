@@ -27,7 +27,6 @@ const TaskStats = () => {
     }
   }, [loading]);
 
-  if (loading) return <LoadingSpinner />;
   if (error) return <h1>An error occurred while fetching tasks</h1>;
 
   return (
@@ -46,6 +45,7 @@ const TaskStats = () => {
       ) : (
         "Add tasks"
       )}
+      {loading && <LoadingSpinner />}
     </div>
   );
 };
@@ -57,7 +57,6 @@ const MemberStats = () => {
     q = query(userCollection, where("id", "in", event.members));
   }
   const [users, loading, error] = useCollection(q);
-  if (loading) return <LoadingSpinner />;
   if (error) return <h1>An error occurred while fetching tasks</h1>;
 
   return (
@@ -66,13 +65,19 @@ const MemberStats = () => {
       <Text fz={"lg"} fw={"bold"}>
         {users ? <>{users.docs.length + 1}</> : 1}
       </Text>
+      {loading && <LoadingSpinner />}
     </div>
   );
 };
 
 const StatsCard = () => {
   return (
-    <Paper p={"lg"} shadow="sm" w={"100%"} className="flex flex-col">
+    <Paper
+      p={"lg"}
+      shadow="sm"
+      w={"100%"}
+      className="relative flex h-full flex-col"
+    >
       <TaskStats />
       <MemberStats />
     </Paper>
