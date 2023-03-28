@@ -1,7 +1,6 @@
 import { Text, Title } from "@mantine/core";
-import LoadingSpinner from "../LoadingSpinner";
 import { useContext } from "react";
-import { EventContext } from ".";
+import { EventContext } from "../index";
 
 const Overview = () => {
   const { event } = useContext(EventContext);

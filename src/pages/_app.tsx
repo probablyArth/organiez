@@ -38,7 +38,6 @@ const MyApp: AppType = ({ Component, pageProps }) => {
 
   const router = useRouter();
   useEffect(() => {
-    console.log({ fetchedUser });
     if (fetchedUser != null && fetchedUser != undefined) {
       setActualLoading(false);
     }
