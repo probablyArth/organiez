@@ -27,7 +27,7 @@ const TaskCard: FC<{ task: ITask }> = ({ task }) => {
   const userData = user?.docs[0]?.data() as IUser;
   return (
     <Paper
-      className="flex h-[100px] w-full items-center justify-between"
+      className="flex h-full min-h-[120px] w-full items-center justify-between"
       shadow="sm"
       p={"lg"}
     >
