@@ -9,11 +9,14 @@ jobs:
   build:
     name: Build & Lint
     runs-on: ubuntu-latest
-    uses: borales/actions-yarn@v4
     steps:
+      - name: Set Node.js 18.5.0
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18.5.0
       - name: Install dependencies
-        run: yarn
+        run: npm i
       - name: Lint
-        run: yarn lint
+        run: npm run lint
       - name: Build
-        run: yarn build
+        run: npm run build
