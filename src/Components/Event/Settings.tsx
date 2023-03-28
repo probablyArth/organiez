@@ -5,6 +5,7 @@ import { deleteDoc, doc, getDocs, query, where } from "firebase/firestore";
 import { eventCollection } from "~/firebase/collections";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
+import { useRouter } from "next/router";
 
 const deleteEvent = async (eventId: string) => {
   try {
@@ -13,8 +14,7 @@ const deleteEvent = async (eventId: string) => {
       (await getDocs(query(eventCollection, where("id", "==", eventId))))
         .docs[0]?.id
     );
-    await deleteDoc(eventDoc);
-    notifications.show({ message: "Success!", color: "green" });
+    return deleteDoc(eventDoc);
   } catch (e) {
     notifications.show({ message: "An error occurred!", color: "red" });
   }
@@ -22,7 +22,7 @@ const deleteEvent = async (eventId: string) => {
 
 const Settings = () => {
   const { event } = useContext(EventContext);
-
+  const router = useRouter();
   return (
     <Button
       color="red"
@@ -31,7 +31,10 @@ const Settings = () => {
           title: `Confirm delete event ${event.title}`,
           children: <Text>Are you sure?</Text>,
           onConfirm: () => {
-            deleteEvent(event.id);
+            deleteEvent(event.id).then(() => {
+              router.reload();
+              notifications.show({ message: "Success!", color: "green" });
+            });
           },
           labels: { confirm: "Confirm", cancel: "Cancel" },
         });
