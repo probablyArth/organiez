@@ -16,6 +16,7 @@ import { BsFillTrashFill } from "react-icons/bs";
 import { auth } from "~/firebase";
 import { v4 } from "uuid";
 import { createMedia } from "@artsy/fresnel";
+import { useClickOutside } from "@mantine/hooks";
 
 const Modal = () => {
   const { user } = useContext(AuthContext);
@@ -84,6 +85,8 @@ const Header: FC<{
   });
   const [opened, setOpened] = useState(false);
   const { user } = useContext(AuthContext);
+
+  const ref = useClickOutside(() => setOpened((prev) => !prev));
   return (
     <header className="flex h-[120px] w-screen items-center justify-between px-6 shadow-md">
       <div className="flex gap-4">
@@ -130,42 +133,45 @@ const Header: FC<{
                   }}
                   color="black"
                   transitionDuration={200}
+                  className={`${opened && "hidden"}`}
                 />
               </Menu.Target>
               <Menu.Dropdown>
-                <Menu.Item>
-                  {events.length !== 0 && (
-                    <Select
-                      data={events.map((value, idx) => {
-                        return {
-                          value: Number(idx).toString(),
-                          label: value.title,
-                        };
-                      })}
-                      transitionProps={{
-                        transition: "pop-top-left",
-                        duration: 80,
-                        timingFunction: "ease",
+                <div ref={ref}>
+                  <Menu.Item>
+                    {events.length !== 0 && (
+                      <Select
+                        data={events.map((value, idx) => {
+                          return {
+                            value: Number(idx).toString(),
+                            label: value.title,
+                          };
+                        })}
+                        transitionProps={{
+                          transition: "pop-top-left",
+                          duration: 80,
+                          timingFunction: "ease",
+                        }}
+                        searchable
+                        value={currEvent}
+                        onChange={(value) => setCurrEvent(value)}
+                      />
+                    )}
+                  </Menu.Item>
+                  <Menu.Item>
+                    <Button
+                      onClick={() => {
+                        modals.open({
+                          title: "Create new event",
+                          children: <Modal />,
+                        });
+                        setOpened(false);
                       }}
-                      searchable
-                      value={currEvent}
-                      onChange={(value) => setCurrEvent(value)}
-                    />
-                  )}
-                </Menu.Item>
-                <Menu.Item>
-                  <Button
-                    onClick={() => {
-                      modals.open({
-                        title: "Create new event",
-                        children: <Modal />,
-                      });
-                      setOpened(false);
-                    }}
-                  >
-                    Create a new event
-                  </Button>
-                </Menu.Item>
+                    >
+                      Create a new event
+                    </Button>
+                  </Menu.Item>
+                </div>
               </Menu.Dropdown>
             </Menu>
           </Media>
