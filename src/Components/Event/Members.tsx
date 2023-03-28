@@ -8,6 +8,7 @@ import { eventCollection, userCollection } from "~/firebase/collections";
 import { type IUser } from "~/firebase/interfaces";
 import { EventContext } from ".";
 import { notifications } from "@mantine/notifications";
+import { FaCrown } from "react-icons/fa";
 import LoadingSpinner from "../LoadingSpinner";
 
 const AddMemberModal: FC<{ eventId: string; membersList: string[] }> = ({
@@ -49,14 +50,20 @@ const AddMemberModal: FC<{ eventId: string; membersList: string[] }> = ({
   };
 
   return (
-    <form onSubmit={form.onSubmit((values) => handleSubmit(values.email))}>
+    <form
+      onSubmit={form.onSubmit((values) => handleSubmit(values.email))}
+      className="flex flex-col gap-4"
+    >
       <TextInput label="Member email" {...form.getInputProps("email")} />
-      <Button>Add</Button>
+      <Button type="submit">Add</Button>
     </form>
   );
 };
 
-const MemberCard: FC<{ member: IUser }> = ({ member }) => {
+const MemberCard: FC<{ member: IUser; isCreator: boolean }> = ({
+  member,
+  isCreator,
+}) => {
   return (
     <Paper
       shadow="sm"
@@ -65,7 +72,10 @@ const MemberCard: FC<{ member: IUser }> = ({ member }) => {
     >
       <Avatar src={member.avatar} />
       <div className="flex flex-col">
-        <Text fw={700}>{member.name}</Text>
+        <div className="flex items-center gap-2">
+          <Text fw={700}>{member.name}</Text>
+          {isCreator && <FaCrown color="gold" className="mb-[5px]" />}
+        </div>
         <Text color="blue">{member.gmail}</Text>
       </div>
     </Paper>
@@ -76,18 +86,18 @@ const Members: FC = () => {
   const { ROLE, event } = useContext(EventContext);
   let q = null;
   if (event.members.length > 0) {
-    q = query(
-      userCollection,
-      or(where("id", "in", event.members), where("id", "==", event.creatorId))
-    );
+    q = query(userCollection, where("id", "in", event.members));
   }
+  const [creator, loadingAsWell, errorAsWell] = useCollection(
+    query(userCollection, where("id", "==", event.creatorId))
+  );
   const [members, loading, error] = useCollection(q);
 
-  if (loading) {
+  if (loading || loadingAsWell) {
     return <LoadingSpinner />;
   }
 
-  if (error) {
+  if (error || errorAsWell) {
     return <h1>An error occured please reload!</h1>;
   }
 
@@ -110,8 +120,9 @@ const Members: FC = () => {
           Add a member
         </Button>
       )}
+      <MemberCard member={creator?.docs[0]?.data() as IUser} isCreator />
       {members?.docs.map((doc, idx) => {
-        return <MemberCard member={doc.data()} key={idx} />;
+        return <MemberCard member={doc.data()} key={idx} isCreator={false} />;
       })}
     </>
   );
