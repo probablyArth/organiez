@@ -7,8 +7,9 @@ import Settings from "./Settings";
 import { createContext } from "react";
 import { AuthContext } from "~/pages/_app";
 import { ScrollArea } from "@mantine/core";
+import Overview from "./Overview";
 
-export type menu = 0 | 1 | 2;
+export type menu = 0 | 1 | 2 | 3;
 type ROLE = "CREATOR" | "MEMBER";
 
 interface IEventContext {
@@ -34,9 +35,10 @@ const Event: FC<{ event: IEvent }> = ({ event }) => {
         <Sidebar currMenu={currMenu} setCurrMenu={setCurrMenu} />
         <ScrollArea className="flex h-full w-full">
           <div className="flex h-full w-full flex-col items-center gap-4 p-4">
-            {currMenu === 0 && <Tasks />}
-            {currMenu === 1 && <Members />}
-            {currMenu === 2 && ROLE === "CREATOR" && <Settings />}
+            {currMenu === 0 && <Overview />}
+            {currMenu === 1 && <Tasks />}
+            {currMenu === 2 && <Members />}
+            {currMenu === 3 && ROLE === "CREATOR" && <Settings />}
           </div>
         </ScrollArea>
       </div>

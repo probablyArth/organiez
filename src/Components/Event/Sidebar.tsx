@@ -30,39 +30,64 @@ const Sidebar: FC<{
 
   const [opened, { open, close }] = useDisclosure(false);
 
+  const SideBarMenu = () => {
+    return (
+      <>
+        <Button
+          variant={currMenu === 0 ? "outline" : "filled"}
+          onClick={() => {
+            setCurrMenu(0);
+            close();
+          }}
+          size="xl"
+          className="w-[200px]"
+        >
+          Overview
+        </Button>
+        <Button
+          variant={currMenu === 1 ? "outline" : "filled"}
+          onClick={() => {
+            setCurrMenu(1);
+            close();
+          }}
+          size="xl"
+          className="w-[200px]"
+        >
+          Tasks
+        </Button>
+        <Button
+          variant={currMenu === 2 ? "outline" : "filled"}
+          onClick={() => {
+            setCurrMenu(2);
+            close();
+          }}
+          size="xl"
+          className="w-[200px]"
+        >
+          Members
+        </Button>
+        {ROLE === "CREATOR" && (
+          <Button
+            variant={currMenu === 3 ? "outline" : "filled"}
+            onClick={() => {
+              setCurrMenu(3);
+              close();
+            }}
+            size="xl"
+            className="w-[200px]"
+          >
+            Settings
+          </Button>
+        )}
+      </>
+    );
+  };
+
   return (
     <MediaContextProvider>
       <Media greaterThanOrEqual="md" className="h-full">
         <nav className="flex h-full w-[300px] flex-col items-center justify-center gap-10 shadow-md">
-          <Button
-            variant={currMenu === 0 ? "outline" : "filled"}
-            onClick={() => {
-              setCurrMenu(0);
-            }}
-            size="xl"
-          >
-            Tasks
-          </Button>
-          <Button
-            variant={currMenu === 1 ? "outline" : "filled"}
-            onClick={() => {
-              setCurrMenu(1);
-            }}
-            size="xl"
-          >
-            Members
-          </Button>
-          {ROLE === "CREATOR" && (
-            <Button
-              variant={currMenu === 2 ? "outline" : "filled"}
-              onClick={() => {
-                setCurrMenu(2);
-              }}
-              size="xl"
-            >
-              Settings
-            </Button>
-          )}
+          <SideBarMenu />
         </nav>
       </Media>
       <Media between={["zero", "md"]}>
@@ -85,38 +110,7 @@ const Sidebar: FC<{
               >
                 <ImCross size={30} />
               </ActionIcon>
-              <Button
-                variant={currMenu === 0 ? "outline" : "filled"}
-                onClick={() => {
-                  setCurrMenu(0);
-                  close();
-                }}
-                size="xl"
-              >
-                Tasks
-              </Button>
-              <Button
-                variant={currMenu === 1 ? "outline" : "filled"}
-                onClick={() => {
-                  setCurrMenu(1);
-                  close();
-                }}
-                size="xl"
-              >
-                Members
-              </Button>
-              {ROLE === "CREATOR" && (
-                <Button
-                  variant={currMenu === 2 ? "outline" : "filled"}
-                  onClick={() => {
-                    setCurrMenu(2);
-                    close();
-                  }}
-                  size="xl"
-                >
-                  Settings
-                </Button>
-              )}
+              <SideBarMenu />
             </nav>
           </Drawer.Content>
         </Drawer.Root>
