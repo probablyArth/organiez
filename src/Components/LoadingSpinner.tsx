@@ -1,5 +1,6 @@
+import { LoadingOverlay } from "@mantine/core";
 const LoadingSpinner = () => {
-  return <div>Loading</div>;
+  return <LoadingOverlay visible />;
 };
 
 export default LoadingSpinner;
