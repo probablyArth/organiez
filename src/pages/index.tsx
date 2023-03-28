@@ -19,7 +19,7 @@ const Home: NextPage = () => {
       <Head>
         <title>Organiez</title>
       </Head>
-      <div className="flex h-screen w-screen flex-col items-center justify-center font-DM">
+      <div className="flex h-screen w-full flex-col items-center justify-center font-DM">
         <h1 className="text-8xl font-extrabold">Organiez</h1>
         <p>
           EZily organise events by distributing and managing tasks among your
