@@ -1,6 +1,6 @@
 import { or, query, where } from "firebase/firestore";
 import { type NextPage } from "next";
-import { useContext, useState } from "react";
+import { useContext, useEffect, useState } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
 import Header from "~/Components/Header";
 import { eventCollection } from "~/firebase/collections";
@@ -22,6 +22,12 @@ const Dashboard: NextPage = () => {
   );
   const [events, loading, error] = useCollectionData(q);
   const [currEvent, setCurrEvent] = useState<string | null>(null);
+
+  useEffect(() => {
+    if (!loading && events?.length && events.length > 0) {
+      setCurrEvent("0");
+    }
+  }, [loading]);
 
   if (!events || loading) {
     return <LoadingSpinner />;

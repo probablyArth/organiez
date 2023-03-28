@@ -129,6 +129,7 @@ const Header: FC<{
                     setOpened((prev) => !prev);
                   }}
                   color="black"
+                  transitionDuration={200}
                 />
               </Menu.Target>
               <Menu.Dropdown>
@@ -159,6 +160,7 @@ const Header: FC<{
                         title: "Create new event",
                         children: <Modal />,
                       });
+                      setOpened(false);
                     }}
                   >
                     Create a new event

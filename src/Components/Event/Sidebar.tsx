@@ -65,14 +65,17 @@ const Sidebar: FC<{
           )}
         </nav>
       </Media>
-      <Media between={["zero", "sm"]}>
-        <Button className="absolute" onClick={open}>
+      <Media between={["zero", "md"]}>
+        <Button
+          className="absolute rounded-l-none rounded-r-full"
+          onClick={open}
+        >
           Menu
         </Button>
         <Drawer.Root opened={opened} onClose={close}>
-          <Drawer.Overlay />
-          <Drawer.Content>
-            <nav className="relative flex h-screen w-screen flex-col items-center justify-center gap-10 shadow-md">
+          <Drawer.Overlay fixed />
+          <Drawer.Content className="w-screen">
+            <nav className="relative flex h-screen w-full flex-col items-center justify-center gap-10 bg-white shadow-md">
               <ActionIcon
                 className="absolute top-6"
                 color="blue"
