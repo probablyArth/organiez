@@ -2,7 +2,7 @@ import { type AppType } from "next/dist/shared/lib/utils";
 import "~/styles/globals.css";
 import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "~/firebase/index";
-import LoadingSpinner from "~/Components/LoadingSpinner";
+import LoadingSpinner from "~/components/LoadingSpinner";
 import { MantineProvider } from "@mantine/core";
 import { createContext, useEffect, useState } from "react";
 import { getDocs, query, where } from "firebase/firestore";

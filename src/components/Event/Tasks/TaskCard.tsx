@@ -7,7 +7,7 @@ import { type ITask, type IUser, STATUS } from "~/firebase/interfaces";
 import { AiFillCheckCircle } from "react-icons/ai";
 import { FaCog } from "react-icons/fa";
 import { AuthContext } from "~/pages/_app";
-import LoadingSpinner from "~/Components/LoadingSpinner";
+import LoadingSpinner from "~/components/LoadingSpinner";
 import { notifications } from "@mantine/notifications";
 
 const updateTaskStatus = async (taskId: string, status: STATUS) => {

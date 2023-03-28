@@ -4,7 +4,7 @@ import { EventContext } from "..";
 import { useCollection } from "react-firebase-hooks/firestore";
 import { type Query, query, where } from "firebase/firestore";
 import { taskCollection, userCollection } from "~/firebase/collections";
-import LoadingSpinner from "~/Components/LoadingSpinner";
+import LoadingSpinner from "~/components/LoadingSpinner";
 import { type IUser, STATUS } from "~/firebase/interfaces";
 
 const TaskStats = () => {

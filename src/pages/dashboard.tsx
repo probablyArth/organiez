@@ -2,12 +2,12 @@ import { or, query, where } from "firebase/firestore";
 import { type NextPage } from "next";
 import { useContext, useEffect, useState } from "react";
 import { useCollectionData } from "react-firebase-hooks/firestore";
-import Header from "~/Components/Header";
+import Header from "~/components/Header";
 import { eventCollection } from "~/firebase/collections";
 import { AuthContext } from "./_app";
-import LoadingSpinner from "~/Components/LoadingSpinner";
+import LoadingSpinner from "~/components/LoadingSpinner";
 import { type IEvent } from "~/firebase/interfaces";
-import Event from "~/Components/Event";
+import Event from "~/components/Event";
 import Head from "next/head";
 import { Text } from "@mantine/core";
 

@@ -3,7 +3,7 @@ import { notifications } from "@mantine/notifications";
 import { type NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
-import SignIn from "~/Components/SignIn";
+import SignIn from "~/components/SignIn";
 import { auth } from "~/firebase/index";
 
 function SignOut() {
