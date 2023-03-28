@@ -27,7 +27,7 @@ const Dashboard: NextPage = () => {
     if (!loading && events?.length && events.length > 0) {
       setCurrEvent("0");
     }
-  }, [loading]);
+  }, [loading, events?.length]);
 
   if (!events || loading) {
     return <LoadingSpinner />;

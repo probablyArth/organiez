@@ -4,16 +4,9 @@ import { EventContext } from "../index";
 import StatsCard from "./StatsCard";
 import { RxExit } from "react-icons/rx";
 import { modals } from "@mantine/modals";
-import {
-  doc,
-  getDoc,
-  getDocs,
-  query,
-  updateDoc,
-  where,
-} from "firebase/firestore";
+import { doc, getDocs, query, updateDoc, where } from "firebase/firestore";
 import { eventCollection } from "~/firebase/collections";
-import { IEvent } from "~/firebase/interfaces";
+import { type IEvent } from "~/firebase/interfaces";
 import { AuthContext } from "~/pages/_app";
 import { notifications } from "@mantine/notifications";
 
@@ -45,16 +38,14 @@ const Overview = () => {
             onClick={() => {
               modals.openConfirmModal({
                 title: `Leave ${event.title}?`,
-                onConfirm: async () => {
-                  try {
-                    await leaveEvent(event.id, user?.id as string);
-                  } catch (e) {
+                onConfirm: () => {
+                  leaveEvent(event.id, user?.id as string).catch((e: Error) => {
                     notifications.show({
                       message: "An error occurred!",
                       color: "red",
                     });
                     console.log({ e });
-                  }
+                  });
                 },
                 labels: {
                   confirm: "Yes",

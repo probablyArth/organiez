@@ -1,4 +1,5 @@
 import { Button } from "@mantine/core";
+import { notifications } from "@mantine/notifications";
 import { type NextPage } from "next";
 import Head from "next/head";
 import { useRouter } from "next/router";
@@ -7,7 +8,21 @@ import { auth } from "~/firebase/index";
 
 function SignOut() {
   return (
-    auth.currentUser && <Button onClick={() => auth.signOut()}>Sign Out</Button>
+    auth.currentUser && (
+      <Button
+        onClick={() => {
+          auth.signOut().catch((e: Error) => {
+            notifications.show({
+              message: "An error occurred while signing out!",
+              color: "red",
+            });
+            console.log({ e });
+          });
+        }}
+      >
+        Sign Out
+      </Button>
+    )
   );
 }
 
@@ -29,7 +44,7 @@ const Home: NextPage = () => {
           {auth.currentUser && (
             <Button
               onClick={() => {
-                router.push("/dashboard");
+                void router.push("/dashboard");
               }}
             >
               Dashboard

@@ -31,10 +31,17 @@ const Settings = () => {
           title: `Confirm delete event ${event.title}`,
           children: <Text>Are you sure?</Text>,
           onConfirm: () => {
-            deleteEvent(event.id).then(() => {
-              router.reload();
-              notifications.show({ message: "Success!", color: "green" });
-            });
+            deleteEvent(event.id)
+              .then(() => {
+                router.reload();
+                notifications.show({ message: "Success!", color: "green" });
+              })
+              .catch(() => {
+                notifications.show({
+                  message: "An error occurred!",
+                  color: "red",
+                });
+              });
           },
           labels: { confirm: "Confirm", cancel: "Cancel" },
         });

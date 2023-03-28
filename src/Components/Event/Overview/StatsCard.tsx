@@ -2,10 +2,10 @@ import { Paper, Text } from "@mantine/core";
 import { useContext, useEffect, useState } from "react";
 import { EventContext } from "..";
 import { useCollection } from "react-firebase-hooks/firestore";
-import { Query, QueryFilterConstraint, query, where } from "firebase/firestore";
+import { type Query, query, where } from "firebase/firestore";
 import { taskCollection, userCollection } from "~/firebase/collections";
 import LoadingSpinner from "~/Components/LoadingSpinner";
-import { IUser, STATUS } from "~/firebase/interfaces";
+import { type IUser, STATUS } from "~/firebase/interfaces";
 
 const TaskStats = () => {
   const { event } = useContext(EventContext);
@@ -25,7 +25,7 @@ const TaskStats = () => {
       });
       setCompleted(completed);
     }
-  }, [loading]);
+  }, [loading, tasks]);
 
   if (error) return <h1>An error occurred while fetching tasks</h1>;
 

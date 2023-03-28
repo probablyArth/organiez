@@ -1,6 +1,6 @@
 import { type AppType } from "next/dist/shared/lib/utils";
 import "~/styles/globals.css";
-import { useAuthState, useSignInWithGoogle } from "react-firebase-hooks/auth";
+import { useAuthState } from "react-firebase-hooks/auth";
 import { auth } from "~/firebase/index";
 import LoadingSpinner from "~/Components/LoadingSpinner";
 import { MantineProvider } from "@mantine/core";
@@ -10,7 +10,7 @@ import { userCollection } from "~/firebase/collections";
 import { ModalsProvider } from "@mantine/modals";
 import { type IUser } from "~/firebase/interfaces";
 import { Notifications } from "@mantine/notifications";
-import { Router, useRouter } from "next/router";
+import { Router } from "next/router";
 import Home from ".";
 
 interface IAuthContext {
@@ -34,17 +34,14 @@ const MyApp: AppType = ({ Component, pageProps }) => {
     },
   });
   const [pageChangeLoad, setLoading] = useState(false);
-  Router.events.on("routeChangeStart", (url) => {
-    console.log("changeStart", { url });
+  Router.events.on("routeChangeStart", () => {
     setLoading(true);
   });
-  Router.events.on("routeChangeComplete", (url) => {
-    console.log("changeComplete", { url });
+  Router.events.on("routeChangeComplete", () => {
     setLoading(false);
   });
   const [actualLoading, setActualLoading] = useState(true);
 
-  const router = useRouter();
   useEffect(() => {
     if (fetchedUser != null && fetchedUser != undefined) {
       setActualLoading(false);
@@ -52,6 +49,7 @@ const MyApp: AppType = ({ Component, pageProps }) => {
   }, [fetchedUser]);
   if (loading || pageChangeLoad) return <LoadingSpinner />;
   if (!user) return <Home />;
+  if (error) return <h1>An error occurred!</h1>;
   if (user && actualLoading) return <LoadingSpinner />;
 
   return (

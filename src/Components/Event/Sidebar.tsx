@@ -1,11 +1,5 @@
 import { ActionIcon, Button, Drawer } from "@mantine/core";
-import {
-  type Dispatch,
-  type FC,
-  type SetStateAction,
-  useContext,
-  useState,
-} from "react";
+import { type Dispatch, type FC, type SetStateAction, useContext } from "react";
 import { EventContext, type menu } from ".";
 import { createMedia } from "@artsy/fresnel";
 import { useDisclosure } from "@mantine/hooks";
@@ -93,7 +87,7 @@ const Sidebar: FC<{
       <Media between={["zero", "md"]}>
         <Button
           className={`absolute z-[100000000000000000] rounded-l-none rounded-r-full ${
-            opened && "hidden"
+            opened ? "hidden" : ""
           }`}
           onClick={open}
         >

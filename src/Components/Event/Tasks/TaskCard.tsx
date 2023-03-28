@@ -8,6 +8,7 @@ import { AiFillCheckCircle } from "react-icons/ai";
 import { FaCog } from "react-icons/fa";
 import { AuthContext } from "~/pages/_app";
 import LoadingSpinner from "~/Components/LoadingSpinner";
+import { notifications } from "@mantine/notifications";
 
 const updateTaskStatus = async (taskId: string, status: STATUS) => {
   const taskDoc = doc(
@@ -53,7 +54,12 @@ const TaskCard: FC<{ task: ITask }> = ({ task }) => {
                 <ActionIcon
                   color="green"
                   onClick={() => {
-                    updateTaskStatus(task.id, STATUS.FINISHED);
+                    updateTaskStatus(task.id, STATUS.FINISHED).catch(() => {
+                      notifications.show({
+                        message: "An error occurred!",
+                        color: "red",
+                      });
+                    });
                   }}
                 >
                   <AiFillCheckCircle />
@@ -66,7 +72,12 @@ const TaskCard: FC<{ task: ITask }> = ({ task }) => {
                   <ActionIcon
                     color="yellow"
                     onClick={() => {
-                      updateTaskStatus(task.id, STATUS.STARTED);
+                      updateTaskStatus(task.id, STATUS.STARTED).catch(() => {
+                        notifications.show({
+                          message: "An error occurred!",
+                          color: "red",
+                        });
+                      });
                     }}
                   >
                     <FaCog />

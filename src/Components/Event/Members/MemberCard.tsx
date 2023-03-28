@@ -1,7 +1,7 @@
 import { Avatar, Paper, Text } from "@mantine/core";
-import { FC } from "react";
+import { type FC } from "react";
 import { FaCrown } from "react-icons/fa";
-import { IUser } from "~/firebase/interfaces";
+import { type IUser } from "~/firebase/interfaces";
 
 const MemberCard: FC<{ member: IUser; isCreator: boolean }> = ({
   member,

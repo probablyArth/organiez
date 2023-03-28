@@ -3,7 +3,7 @@ import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { notifications } from "@mantine/notifications";
 import { doc, getDocs, query, updateDoc, where } from "firebase/firestore";
-import { FC } from "react";
+import { type FC } from "react";
 import { eventCollection, userCollection } from "~/firebase/collections";
 
 const AddMemberModal: FC<{ eventId: string; membersList: string[] }> = ({
@@ -46,7 +46,9 @@ const AddMemberModal: FC<{ eventId: string; membersList: string[] }> = ({
 
   return (
     <form
-      onSubmit={form.onSubmit((values) => handleSubmit(values.email))}
+      onSubmit={form.onSubmit((values) => {
+        void handleSubmit(values.email);
+      })}
       className="flex flex-col gap-4"
     >
       <TextInput label="Member email" {...form.getInputProps("email")} />

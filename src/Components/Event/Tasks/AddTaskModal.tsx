@@ -22,8 +22,7 @@ interface ItemProps extends React.ComponentPropsWithoutRef<"div"> {
   label: string;
   description: string;
 }
-
-const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
+const SelectItem: FC<ItemProps> = forwardRef<HTMLDivElement, ItemProps>(
   ({ image, label, description, ...others }: ItemProps, ref) => (
     <div ref={ref} {...others}>
       <Group noWrap p={2}>
@@ -41,7 +40,7 @@ const SelectItem = forwardRef<HTMLDivElement, ItemProps>(
 
 const AddTaskModal: FC<{ event: IEvent }> = ({ event }) => {
   const [otherError, setError] = useState<null | string>(null);
-  const handleSubmit = async (description: string, assignee: string) => {
+  const handleSubmit = (description: string, assignee: string) => {
     addDoc(taskCollection, {
       id: v4(),
       assigned: assignee,
@@ -52,7 +51,7 @@ const AddTaskModal: FC<{ event: IEvent }> = ({ event }) => {
       .then(() => {
         modals.closeAll();
       })
-      .catch((e) => {
+      .catch((e: Error) => {
         setError(e.message);
       });
   };
@@ -93,7 +92,7 @@ const AddTaskModal: FC<{ event: IEvent }> = ({ event }) => {
         );
       }
     }
-  }, [loading]);
+  }, [loading, members?.docs]);
   if (loading) return <LoadingSpinner />;
 
   if (event.members.length === 0) return <h1>First add members</h1>;
@@ -106,9 +105,9 @@ const AddTaskModal: FC<{ event: IEvent }> = ({ event }) => {
       </div>
       <form
         className="flex h-full flex-col gap-4"
-        onSubmit={form.onSubmit((values) =>
-          handleSubmit(values.description, assignee as string)
-        )}
+        onSubmit={form.onSubmit((values) => {
+          handleSubmit(values.description, assignee as string);
+        })}
       >
         <TextInput
           label="Task Description"

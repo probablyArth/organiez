@@ -17,6 +17,7 @@ import { auth } from "~/firebase";
 import { v4 } from "uuid";
 import { createMedia } from "@artsy/fresnel";
 import { useClickOutside } from "@mantine/hooks";
+import { notifications } from "@mantine/notifications";
 
 const Modal = () => {
   const { user } = useContext(AuthContext);
@@ -49,7 +50,15 @@ const Modal = () => {
   return (
     <form
       className="flex flex-col gap-6"
-      onSubmit={form.onSubmit(handleSubmit)}
+      onSubmit={form.onSubmit((e) => {
+        handleSubmit(e).catch((e: Error) => {
+          notifications.show({
+            message: "An error occurred while creating an event!",
+            color: "red",
+          });
+          console.log({ e });
+        });
+      })}
     >
       <TextInput
         label="Title"
@@ -133,7 +142,7 @@ const Header: FC<{
                   }}
                   color="black"
                   transitionDuration={200}
-                  className={`${opened && "hidden"}`}
+                  className={opened ? "hidden" : ""}
                 />
               </Menu.Target>
               <Menu.Dropdown>
@@ -186,7 +195,13 @@ const Header: FC<{
             color="red"
             icon={<BsFillTrashFill />}
             onClick={() => {
-              auth.signOut();
+              auth.signOut().catch((e: Error) => {
+                notifications.show({
+                  message: "There was an error while signing out!",
+                  color: "red",
+                });
+                console.log({ e });
+              });
             }}
           >
             Logout

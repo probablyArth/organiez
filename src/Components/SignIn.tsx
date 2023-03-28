@@ -26,7 +26,15 @@ const SignIn = () => {
       });
     }
   };
-  return <Button onClick={signInWithGoogle}>Sign In</Button>;
+  return (
+    <Button
+      onClick={() => {
+        void signInWithGoogle();
+      }}
+    >
+      Sign In
+    </Button>
+  );
 };
 
 export default SignIn;
