@@ -87,6 +87,7 @@ const Sidebar: FC<{
                 variant={currMenu === 0 ? "outline" : "filled"}
                 onClick={() => {
                   setCurrMenu(0);
+                  close();
                 }}
                 size="xl"
               >
@@ -96,6 +97,7 @@ const Sidebar: FC<{
                 variant={currMenu === 1 ? "outline" : "filled"}
                 onClick={() => {
                   setCurrMenu(1);
+                  close();
                 }}
                 size="xl"
               >
@@ -106,6 +108,7 @@ const Sidebar: FC<{
                   variant={currMenu === 2 ? "outline" : "filled"}
                   onClick={() => {
                     setCurrMenu(2);
+                    close();
                   }}
                   size="xl"
                 >
