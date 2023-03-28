@@ -9,6 +9,7 @@ import LoadingSpinner from "~/Components/LoadingSpinner";
 import { type IEvent } from "~/firebase/interfaces";
 import Event from "~/Components/Event";
 import Head from "next/head";
+import { Text } from "@mantine/core";
 
 const Dashboard: NextPage = () => {
   const { user } = useContext(AuthContext);
@@ -19,17 +20,23 @@ const Dashboard: NextPage = () => {
       where("members", "array-contains", user?.id)
     )
   );
-  const [events, loading] = useCollectionData(q);
+  const [events, loading, error] = useCollectionData(q);
   const [currEvent, setCurrEvent] = useState<string | null>(null);
+
   if (!events || loading) {
     return <LoadingSpinner />;
   }
   return (
     <>
+      {error && (
+        <Text fz={"md"} color="red">
+          {error.message}
+        </Text>
+      )}
       <Head>
         <title>Organiez</title>
       </Head>
-      <div className="flex h-screen w-screen flex-col">
+      <div className="relative flex h-screen w-screen flex-col">
         <Header
           events={events}
           setCurrEvent={setCurrEvent}

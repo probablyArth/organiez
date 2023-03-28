@@ -1,14 +1,21 @@
-import { Avatar, Button, Menu, Select, TextInput } from "@mantine/core";
+import { Avatar, Burger, Button, Menu, Select, TextInput } from "@mantine/core";
 import { useForm } from "@mantine/form";
 import { modals } from "@mantine/modals";
 import { addDoc } from "firebase/firestore";
-import { type Dispatch, type FC, type SetStateAction, useContext } from "react";
+import {
+  type Dispatch,
+  type FC,
+  type SetStateAction,
+  useContext,
+  useState,
+} from "react";
 import { eventCollection } from "~/firebase/collections";
 import { type IEvent } from "~/firebase/interfaces";
 import { AuthContext } from "~/pages/_app";
 import { BsFillTrashFill } from "react-icons/bs";
 import { auth } from "~/firebase";
 import { v4 } from "uuid";
+import { createMedia } from "@artsy/fresnel";
 
 const Modal = () => {
   const { user } = useContext(AuthContext);
@@ -65,37 +72,104 @@ const Header: FC<{
   setCurrEvent: Dispatch<SetStateAction<string | null>>;
   currEvent: string | null;
 }> = ({ events, setCurrEvent, currEvent }) => {
+  const { MediaContextProvider, Media } = createMedia({
+    breakpoints: {
+      zero: 0,
+      sm: 640,
+      md: 768,
+      lg: 1024,
+      xl: 1280,
+      twoXl: 1536,
+    },
+  });
+  const [opened, setOpened] = useState(false);
   const { user } = useContext(AuthContext);
   return (
-    <header className="-4 flex h-[100px] w-full items-center justify-between px-6 shadow-md">
+    <header className="flex h-[120px] w-screen items-center justify-between px-6 shadow-md">
       <div className="flex gap-4">
-        {events.length !== 0 && (
-          <Select
-            data={events.map((value, idx) => {
-              return { value: Number(idx).toString(), label: value.title };
-            })}
-            transitionProps={{
-              transition: "pop-top-left",
-              duration: 80,
-              timingFunction: "ease",
-            }}
-            searchable
-            value={currEvent}
-            onChange={(value) => setCurrEvent(value)}
-          />
-        )}
-        <Button
-          onClick={() => {
-            modals.open({
-              title: "Create new event",
-              children: <Modal />,
-            });
-          }}
-        >
-          Create a new event
-        </Button>
+        <MediaContextProvider>
+          <Media greaterThanOrEqual="sm">
+            <div className="flex gap-4">
+              {events.length !== 0 && (
+                <Select
+                  data={events.map((value, idx) => {
+                    return {
+                      value: Number(idx).toString(),
+                      label: value.title,
+                    };
+                  })}
+                  transitionProps={{
+                    transition: "pop-top-left",
+                    duration: 80,
+                    timingFunction: "ease",
+                  }}
+                  searchable
+                  value={currEvent}
+                  onChange={(value) => setCurrEvent(value)}
+                />
+              )}
+              <Button
+                onClick={() => {
+                  modals.open({
+                    title: "Create new event",
+                    children: <Modal />,
+                  });
+                }}
+              >
+                Create a new event
+              </Button>
+            </div>
+          </Media>
+          <Media between={["zero", "sm"]}>
+            <Menu opened={opened} width={200}>
+              <Menu.Target>
+                <Burger
+                  opened={opened}
+                  onClick={() => {
+                    setOpened((prev) => !prev);
+                  }}
+                  color="black"
+                />
+              </Menu.Target>
+              <Menu.Dropdown>
+                <Menu.Item>
+                  {events.length !== 0 && (
+                    <Select
+                      data={events.map((value, idx) => {
+                        return {
+                          value: Number(idx).toString(),
+                          label: value.title,
+                        };
+                      })}
+                      transitionProps={{
+                        transition: "pop-top-left",
+                        duration: 80,
+                        timingFunction: "ease",
+                      }}
+                      searchable
+                      value={currEvent}
+                      onChange={(value) => setCurrEvent(value)}
+                    />
+                  )}
+                </Menu.Item>
+                <Menu.Item>
+                  <Button
+                    onClick={() => {
+                      modals.open({
+                        title: "Create new event",
+                        children: <Modal />,
+                      });
+                    }}
+                  >
+                    Create a new event
+                  </Button>
+                </Menu.Item>
+              </Menu.Dropdown>
+            </Menu>
+          </Media>
+        </MediaContextProvider>
       </div>
-      <Menu shadow="md">
+      <Menu shadow="md" position="left">
         <Menu.Target>
           <Avatar src={user?.avatar} className="cursor-pointer" />
         </Menu.Target>
