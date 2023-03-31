@@ -33,7 +33,7 @@ const Event: FC<{ event: IEvent }> = ({ event }) => {
   }
   return (
     <EventContext.Provider value={{ event, ROLE }}>
-      <div className="flex h-[calc(100%-120px)] w-full items-center">
+      <div className="flex h-full w-full items-center">
         <Sidebar currMenu={currMenu} setCurrMenu={setCurrMenu} />
         <ScrollArea className="flex h-full w-full">
           <div className="flex h-full w-full flex-col items-center gap-4 p-4">
