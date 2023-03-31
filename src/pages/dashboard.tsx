@@ -42,13 +42,12 @@ const Dashboard: NextPage = () => {
       <Head>
         <title>Organiez</title>
       </Head>
-      <div className="relative flex h-screen w-screen flex-col">
+      <div className="relative flex h-screen w-screen flex-col overflow-y-hidden">
         <Header
           events={events}
           setCurrEvent={setCurrEvent}
           currEvent={currEvent}
         />
-        <div className="h-[120px]"></div>
         {events.length === 0 && (
           <div className="flex h-full w-full items-center justify-center">
             Start by creating an event
