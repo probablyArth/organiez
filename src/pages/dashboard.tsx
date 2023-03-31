@@ -48,6 +48,7 @@ const Dashboard: NextPage = () => {
           setCurrEvent={setCurrEvent}
           currEvent={currEvent}
         />
+        <div className="h-[120px]"></div>
         {events.length === 0 && (
           <div className="flex h-full w-full items-center justify-center">
             Start by creating an event

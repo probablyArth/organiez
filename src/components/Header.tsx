@@ -97,7 +97,7 @@ const Header: FC<{
 
   const ref = useClickOutside(() => setOpened((prev) => !prev));
   return (
-    <header className="flex h-[120px] w-screen items-center justify-between px-6 shadow-md sticky">
+    <header className="flex h-[120px] w-screen items-center justify-between px-6 shadow-md fixed top-0">
       <div className="flex gap-4">
         <MediaContextProvider>
           <Media greaterThanOrEqual="sm">
