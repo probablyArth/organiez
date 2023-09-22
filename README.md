@@ -11,3 +11,15 @@ demo video - [youtube](https://www.youtube.com/watch?v=iwR7CdpVeAI)
 - firebase
 - tailwind
 - mantine
+
+## Developing locally
+```bash
+# install the dependencies
+yarn
+
+# add .env file and populate it with appropriate variables
+cp .env.example .env
+
+# run the local server
+yarn dev
+```
